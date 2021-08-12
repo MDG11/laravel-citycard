@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Card;
-use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -33,39 +30,30 @@ class LoginController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
-    
+    public function showLoginForm()
+    {
+        return view('auth.admin.login');
+    }
+
     protected function validateLogin(Request $request)
     {
-        $request->user_id = User::where('phone','=',$request->user_id)->first()->id;
         $request->validate([
-            'card_code' => 'required',
-            'user_id' => 'required',
+            $this->username() => 'required|string|max:255',
+            'password' => 'required|string',
         ]);
     }
-
-    /**
-     * Attempt to log the user into the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return bool
-     */
-    protected function attemptLogin(Request $request)
-    {
-        $account = Card::where('card_code','=', $request->card_code)->where('user_id','=',$request->user_id)->first();
-        if($account){
-            return $this->guard()->loginUsingId($account->id);
-        }
-        else return back()->withErrors('Error logging in!');
-    }
-
     protected function credentials(Request $request)
     {
-        return $request->only('card_code', 'user_id');
+        $request->is_admin = true;
+        return $request->only($this->username(), 'password', 'is_admin');
     }
 
-    
     public function username()
     {
-        return 'card_code';
+        return 'login';
+    }
+    protected function guard()
+    {
+        return Auth::guard('admin');
     }
 }
