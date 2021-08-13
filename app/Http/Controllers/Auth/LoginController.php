@@ -26,6 +26,12 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+
+    public function __construct()
+    {
+        $this->middleware('guest:web')->except('logout');
+        $this->middleware('guest:admin')->except('logout');
+    }
     /**
      * Where to redirect users after login.
      *
@@ -36,6 +42,7 @@ class LoginController extends Controller
     
     protected function validateLogin(Request $request)
     {
+        if(User::where('phone','=',$request->user_id)->first())
         $request->user_id = User::where('phone','=',$request->user_id)->first()->id;
         $request->validate([
             'card_code' => 'required',
@@ -55,7 +62,7 @@ class LoginController extends Controller
         if($account){
             return $this->guard()->loginUsingId($account->id);
         }
-        else return back()->withErrors('Error logging in!');
+        else return false;
     }
 
     protected function credentials(Request $request)

@@ -14,4 +14,9 @@ class Card extends Authenticatable
     protected $fillable = ['balance', 'card_code', 'user_id', 'card_type_id'];
 
     protected $hidden = ['remember_token'];
+
+    public function card_type()
+    {
+        return $this->belongsTo(CardType::class);
+    }
 }

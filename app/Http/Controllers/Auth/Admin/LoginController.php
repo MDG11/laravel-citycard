@@ -23,6 +23,12 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+
+    public function __construct()
+    {
+        $this->middleware('guest:web')->except('logout');
+        $this->middleware('guest:admin')->except('logout');
+    }
     /**
      * Where to redirect users after login.
      *
@@ -44,8 +50,14 @@ class LoginController extends Controller
     }
     protected function credentials(Request $request)
     {
-        $request->is_admin = true;
         return $request->only($this->username(), 'password', 'is_admin');
+    }
+
+    protected function attemptLogin(Request $request)
+    {
+        return $this->guard()->attempt(
+            $this->credentials($request), $request->filled('remember')
+        );
     }
 
     public function username()

@@ -13,6 +13,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $seed = new AdminSeeder();
+        $seed->run();
+        $seed = new CardTypeSeeder();
+        $seed->run();
+        $seed = new VehicleTypeSeeder();
+        $seed->run();
+        $seed = new PriceSeeder();
+        $seed->run();
     }
 }

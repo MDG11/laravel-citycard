@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('admin.login') }}">
                         @csrf
-
+                        <input type="number" value="1" name="is_admin" hidden>
                         <div class="form-group row">
                             <label for="login" class="col-md-4 col-form-label text-md-right">{{ __('login') }}</label>
 

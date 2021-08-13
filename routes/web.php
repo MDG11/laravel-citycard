@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\Admin\LoginController;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect(route('home'));
 });
 
 Auth::routes();
@@ -32,6 +33,6 @@ Route::prefix('admin')
         Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     });
 
-Route::middleware('auth')->get('/admin/check', function(){
+Route::middleware('auth:admin')->get('/admin/check', function(){
     echo 'You are admin!';
 });

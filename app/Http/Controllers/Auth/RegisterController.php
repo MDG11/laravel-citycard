@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
+
+    
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -39,7 +41,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('guest:web,admin');
     }
 
     /**

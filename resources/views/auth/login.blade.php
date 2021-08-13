@@ -1,56 +1,61 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">{{ __('Login') }}</div>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+                    <div class="card-body">
 
-                        <div class="form-group row">
-                            <label for="phone" class="col-md-4 col-form-label text-md-right">{{ __('phone') }}</label>
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
 
-                            <div class="col-md-6">
-                                <input id="phone" type="phone" class="form-control @error('phone') is-invalid @enderror" name="user_id" value="{{ old('phone') }}" required autocomplete="phone" autofocus>
+                            <div class="form-group row">
+                                <label for="phone" class="col-md-4 col-form-label text-md-right">{{ __('phone') }}</label>
 
-                                @error('phone')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <div class="col-md-6">
+                                    <input id="phone" type="phone" class="form-control @error('phone') is-invalid @enderror"
+                                        name="user_id" value="{{ old('phone') }}" required autocomplete="phone" autofocus>
+
+                                    @error('phone')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group row">
-                            <label for="card_code" class="col-md-4 col-form-label text-md-right">{{ __('card_code') }}</label>
+                            <div class="form-group row">
+                                <label for="card_code"
+                                    class="col-md-4 col-form-label text-md-right">{{ __('card_code') }}</label>
 
-                            <div class="col-md-6">
-                                <input id="card_code" type="card_code" class="form-control @error('card_code') is-invalid @enderror" name="card_code" required autocomplete="current-password">
+                                <div class="col-md-6">
+                                    <input id="card_code" type="card_code"
+                                        class="form-control @error('card_code') is-invalid @enderror" name="card_code"
+                                        required autocomplete="current-password">
 
-                                @error('card_code')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                    @error('card_code')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
+                            <div class="form-group row mb-0">
+                                <div class="col-md-8 offset-md-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        {{ __('Login') }}
+                                    </button>
 
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
