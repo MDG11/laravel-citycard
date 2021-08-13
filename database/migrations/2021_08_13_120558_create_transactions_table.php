@@ -15,6 +15,10 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('card_id')->constrained()->onDelete('cascade');
+            $table->enum('status', ['succeeded', 'cancelled', 'failed', 'pending']);
+            $table->string('card_number');
+            $table->integer('sum');
             $table->timestamps();
         });
     }

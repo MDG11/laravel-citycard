@@ -8,18 +8,18 @@
                     <div class="card-header">{{ __('Your data') }}</div>
 
                     <div class="card-body">
-                        <h1>Card #{{ auth()->user()->card_code }}</h1>
-                        <h2>Card type: {{ auth()->user()->card_type->type }}</h2>
+                        <h1>Card #{{ auth()->user()->card_code ?? auth()->user()->login }}</h1>
+                        <h2>Card type: {{ auth()->user()->card_type->type ?? 'Admin' }}</h2>
                         <h2>Balance: {{ number_format(auth()->user()->balance / 100, 2) }} $</h2>
                         <div class="row">
                             <div class="col-md-3">
-                                <a href="" class="btn btn-success">Add funds</a>
+                                <a href="{{ route('refill.balance.show') }}" class="btn btn-success">Add funds</a>
                             </div>
                             <div class="col-md-3">
-                                <a href="" class="btn btn-primary">Withdraw funds</a>
+                                <a href="{{ route('balance.withdraw.show') }}" class="btn btn-primary">Withdraw funds</a>
                             </div>
                             <div class="col-md-3">
-                                <a href="" class="btn btn-primary">Payment history</a>
+                                <a href="{{ route('transactions.history') }}" class="btn btn-primary">Payment history</a>
                             </div>
                         </div>
                     </div>

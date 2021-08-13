@@ -1,0 +1,114 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Transaction;
+use Cartalyst\Stripe\Laravel\Facades\Stripe;
+use Exception;
+use Illuminate\Http\Request;
+
+class TransactionController extends Controller
+{
+    public function refill_balance_show()
+    {
+
+        return view('transactions.refill_form');
+    }
+
+    public function proceed_refill(Request $request)
+    {
+
+        $request->validate([
+            "sum" => 'required',
+            "name" => "required",
+            "number" => "required|numeric",
+            "month" => "required|numeric",
+            "year" => "required|numeric",
+            "cvv" => "required|numeric",
+        ]);
+        $stripe = Stripe::make(env('STRIPE_SECRET'));
+
+        try {
+            $token = $stripe->tokens()->create([
+                'card' => [
+                    "name" => $request->name,
+                    "number" => $request->number,
+                    "exp_month" => $request->month,
+                    "exp_year" => $request->year,
+                    "cvc" => $request->cvv,
+                ]
+            ]);
+
+            if (!isset($token['id'])) {
+                redirect()->back()->with('stripe_error', 'The stripe token was not generated correctly!');
+            }
+
+            $customer = $stripe->customers()->create([
+                'phone' => $request->phone,
+                'source' => $token['id']
+            ]);
+            $sum = floatval(str_replace('.', '', $request->sum)); // convert cart total to comparable float 
+            $charge = $stripe->charges()->create([
+                'customer' => $customer['id'],
+                'currency' => 'USD',
+                'amount' => $sum / 100,
+                'description' => 'Citycard refill',
+            ]);
+            if ($charge['status'] == 'succeeded') {
+                $transaction = new Transaction();
+                $transaction->card_id = auth()->user()->id;
+                $transaction->status = 'approved';
+                $transaction->sum = $sum;
+                $transaction->type = 'refill';
+                $transaction->save();
+                $user = auth()->user();
+                $user->balance += $sum;
+                $user->save();
+                return redirect(route('home'));
+            } else {
+                return redirect()->back()->with('stripe_error', 'Payment didn`t succedd?)');
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with('stripe_error', $e->getMessage());
+        }
+    }
+    public function balance_withdraw_show()
+    {
+        return view('transactions.withdraw_form');
+    }
+    public function balance_withdraw(Request $request)
+    {
+        $request->validate([
+            "sum" => 'required',
+            "number" => "required|numeric",
+        ]);
+        $sum = intval(str_replace('.', '', $request->sum)); // convert cart total to comparable float 
+        if($sum>auth()->user()->balance) return redirect()->back()->with('success', 'Not enough funds');
+        if($sum<1000) return redirect()->back()->with('success', 'Minimal sum is 10.00 $');
+        $transaction = new Transaction();
+        $transaction->card_id = auth()->user()->id;
+        $transaction->status = 'pending';
+        $transaction->sum = $sum;
+        $transaction->type = 'withdraw';
+        $transaction->card_number = $request->number;
+        $transaction->save();
+        $user = auth()->user();
+        $user->balance = $user->balance - $sum;
+        $user->save();
+        return redirect(route('home'));
+    }
+
+    public function history()
+    {
+        $transactions = Transaction::where('card_id', '=', auth()->id())->orderBy('updated_at', 'DESC')->paginate(10);
+        return view('transactions.history', compact('transactions'));
+    }
+
+    public function transaction_cancel($id)
+    {
+        $transaction = Transaction::find($id);
+        $transaction->status = 'cancelled';
+        $transaction->save();
+        return back();
+    }
+}

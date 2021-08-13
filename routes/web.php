@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\Admin\LoginController;
+use App\Http\Controllers\TransactionController;
+use App\Models\Price;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -32,7 +34,14 @@ Route::prefix('admin')
         Route::post('login', [LoginController::class, 'login']);
         Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     });
-
-Route::middleware('auth:admin')->get('/admin/check', function(){
-    echo 'You are admin!';
+    Route::get('/asd', function(){
+        dd(auth()->user()->hasDefaultPaymentMethod());
+     });
+Route::middleware('auth:web')->group(function(){
+    Route::get('/balance/refill', [TransactionController::class, 'refill_balance_show'])->name('refill.balance.show');
+    Route::post('/balance/refill', [TransactionController::class, 'proceed_refill'])->name('refill.proceed');
+    Route::get('/balance/withdraw', [TransactionController::class, 'balance_withdraw_show'])->name('balance.withdraw.show');
+    Route::post('/balance/withdraw', [TransactionController::class, 'balance_withdraw'])->name('withdraw.proceed');
+    Route::get('/transactions/history', [TransactionController::class, 'history'])->name('transactions.history');
+    Route::get('/transactions/cancel/{id}', [TransactionController::class, 'transaction_cancel'])->name('transaction.cancel');
 });
