@@ -5,15 +5,14 @@
             @if (Session::has('success'))
                 <div class="alert alert-danger">{{ Session::get('success') }}</div>
             @endif
-            <form method="POST" action="{{ route('withdraw.proceed') }}">
+            <form method="POST" action="{{ route('stripe.withdraw.proceed') }}">
                 @if (Session::has('stripe_error'))
                     <div class="alert alert-danger" role="alert">{{ Session::get('stripe_error') }}</div>
                 @endif
                 @csrf
                 <div class="card">
                     <div class="card-header">
-                        <strong>Credit Card</strong>
-                        <small>enter your card number</small>
+                        <strong>Stripe</strong>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -34,11 +33,9 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="ccnumber">Credit Card Number</label>
+                                    <label for="ccnumber">Stripe ID</label>
                                     <div class="input-group">
-                                        <input class="form-control" name="number" type="text"
-                                            pattern="^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$"
-                                            placeholder="0000 0000 0000 0000" autocomplete="email">
+                                        <input class="form-control" name="number" type="text" autocomplete="email">
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="mdi mdi-credit-card"></i>

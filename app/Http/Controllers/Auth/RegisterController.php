@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Card;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Rules\FreeCode;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -53,9 +54,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'card_code' => ['required', 'string', 'max:255', 'unique:cards,card_code'],
-            'phone' => ['required', 'unique:users,phone'],
-            'card_type_id' => ['required']
+            'card_code' => ['required', 'string', 'max:255', 'exists:cards,card_code', new FreeCode()],
+            'phone' => ['required'],
         ]);
     }
 
@@ -67,13 +67,15 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = new User();
-        $user->phone = $data['phone'];
-        $user->save();
-        return Card::create([
-            'card_code' => $data['card_code'],
-            'user_id' => $user->id,
-            'card_type_id' => $data['card_type_id']
-        ]);
+        if (!User::where('phone', '=', $data['phone'])->first()) {
+            $user = new User();
+            $user->phone = $data['phone'];
+            $user->save();
+        } else $user = User::where('phone', '=', $data['phone'])->first();
+        $card = Card::where('card_code', '=', $data['card_code'])->first();
+        $card->user_id = $user->id;
+        $card->setRememberToken($token = Str::random(10));
+        $card->save();
+        return $card;
     }
 }

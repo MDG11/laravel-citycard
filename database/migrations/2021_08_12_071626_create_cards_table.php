@@ -17,7 +17,7 @@ class CreateCardsTable extends Migration
             $table->id();
             $table->string('card_code')->unique();
             $table->integer('balance')->default(0);
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('card_type_id')->constrained()->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();

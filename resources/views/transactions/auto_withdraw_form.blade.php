@@ -2,7 +2,7 @@
 @section('content')
     <div class="row">
         <div class="col-sm-12">
-            <form method="POST" action="{{ route('refill.proceed') }}">
+            <form method="POST" action="{{ route('auto_withdraw.proceed') }}">
                 @if (Session::has('stripe_error'))
                     <div class="alert alert-danger" role="alert">{{ Session::get('stripe_error') }}</div>
                 @endif

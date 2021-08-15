@@ -19,4 +19,8 @@ class Card extends Authenticatable
     {
         return $this->belongsTo(CardType::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

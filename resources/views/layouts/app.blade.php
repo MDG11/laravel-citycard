@@ -37,7 +37,29 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        @if (auth()->guard('admin')->check())
+                            <li class="nav-item">
+                                <a href="{{ route('admin.cities.index') }}" class="nav-link">Cities</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.cards.index') }}" class="nav-link">Cards</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.card-types.index') }}" class="nav-link">Card types</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.vehicles.index') }}" class="nav-link">Vehicles</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.vehicle-types.index') }}" class="nav-link">Vehicle Types</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.prices.index') }}" class="nav-link">Prices</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.withdraws.index') }}" class="nav-link">Withdraws</a>
+                            </li>
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->

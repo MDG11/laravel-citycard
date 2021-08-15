@@ -17,7 +17,7 @@
                         <tr>
                             <td>{{ $transaction->id }}</td>
                             <td>{{ $transaction->type }}</td>
-                            <td>{{ number_format($transaction->sum, 2) }}</td>
+                            <td>{{ number_format($transaction->sum/100, 2) }}</td>
                             <td>{{ $transaction->status }}</td>
                             <td>
                                 @if ($transaction->status == 'pending')
