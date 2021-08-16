@@ -1,10 +1,10 @@
 <?php
 /**
  * @OA\Schema(
- *     title="Project",
- *     description="Project model",
+ *     title="Card",
+ *     description="Card model",
  *     @OA\Xml(
- *         name="Project"
+ *         name="Card"
  *     )
  * )
  */
@@ -96,7 +96,7 @@ class Project
 
     /**
      * @OA\Property(
-     *     title="User",
+     *     title="Rides",
      *     description="Card's rides model"
      * )
      *

@@ -1,0 +1,153 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Citycard API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/pay": {
+            "post": {
+                "tags": [
+                    "pay"
+                ],
+                "summary": "Pay",
+                "description": "Pay with terminal",
+                "operationId": "pay",
+                "requestBody": {
+                    "description": "Pass data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "price",
+                                    "card",
+                                    "vehicle"
+                                ],
+                                "properties": {
+                                    "price": {
+                                        "type": "integer",
+                                        "format": "number",
+                                        "example": "100"
+                                    },
+                                    "card": {
+                                        "type": "object",
+                                        "example": "{'id':1,'card_code':'TSDQKBO0','balance':0,'user_id':null,'card_type_id':2,'created_at':'2021-08-15T23:27:19.000000Z','updated_at':'2021-08-15T23:27:19.000000Z'}"
+                                    },
+                                    "vehicle": {
+                                        "type": "object",
+                                        "example": "{'id':1,'licence_plate_number':'BG6966JE','vehicle_type_id':2,'created_at':'2021-08-15T23:27:19.000000Z','updated_at':'2021-08-15T23:27:19.000000Z','city_id':1}"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Payed for the ride, created new Ride",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Everything is good, thanks for using our API"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated card"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Project": {
+                "title": "Card",
+                "description": "Card model",
+                "properties": {
+                    "id": {
+                        "title": "ID",
+                        "description": "ID",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "card_code": {
+                        "title": "Card Code",
+                        "description": "Card unique code",
+                        "type": "string",
+                        "example": "PLVMVWSNM9D"
+                    },
+                    "balance": {
+                        "title": "Balance",
+                        "description": "Card balance",
+                        "type": "string",
+                        "example": "100"
+                    },
+                    "created_at": {
+                        "title": "Created at",
+                        "description": "Created at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    },
+                    "updated_at": {
+                        "title": "Updated at",
+                        "description": "Updated at",
+                        "type": "string",
+                        "format": "datetime",
+                        "example": "2020-01-27 17:50:45"
+                    },
+                    "user_id": {
+                        "title": "User ID",
+                        "description": "User's id of card",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "user": {
+                        "title": "User",
+                        "description": "Card user model"
+                    },
+                    "rides": {
+                        "title": "Rides",
+                        "description": "Card's rides model"
+                    },
+                    "card_type": {
+                        "title": "Card Type",
+                        "description": "Cards type"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Card"
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}
